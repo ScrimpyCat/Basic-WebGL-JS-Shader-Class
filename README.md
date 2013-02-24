@@ -40,3 +40,43 @@ Example usage:
     
     //and an example of referencing the attribute
     gl.enableVertexAttribArray(test.attributes.vertex);
+
+Example uniform setter:
+---
+    case gl.FLOAT:
+    setUniform = function(location, oldValue, newValue){
+        if (oldValue != newValue)
+        {
+            oldValue = newValue;
+            gl.uniform1f(location, newValue);
+        }
+        
+        return oldValue;
+    };
+                        
+    initValue = 0;
+    break;
+
+    case gl.FLOAT_VEC2:
+    setUniform = function(location, oldValue, newValue){
+        if (oldValue.isEqual(newValue) == false)
+        {
+            oldValue = new Vector(newValue);
+            gl.uniform2fv(location, newValue.toFloat32Array());
+        }
+        
+        return oldValue;
+    };
+    
+    initValue = new Vector(0,0);
+    break;
+
+    //alternatively you might decide to not care about redundant uniform sets, or you'll be watching for them somewhere else so the simplest form it can take is as follows
+    case gl.INT:
+    setUniform = function(location, oldValue, newValue){
+        gl.uniform1i(location, newValue);
+        return newValue;
+    };
+                        
+    initValue = 0;
+    break;
